@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const mysql = require('mysql')
+const path = require('path')
 
 // Connect with database mysql
 var con = mysql.createConnection({
@@ -14,10 +15,14 @@ con.on('error', function(err) {
     console.log("[mysql error]",err);
   });
 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
+
+// VARIABLES
+
+let date = new Date();
+let date_full = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate()
 
 /// API ///
-
 
 app.post('/api/checklicense', function(req, res) {
     let license = req.body.license
@@ -25,7 +30,14 @@ app.post('/api/checklicense', function(req, res) {
     con.query('SELECT * FROM licenses WHERE license = ?', [license], function(err, result) {
         if (err) {console.log(err); return; }
         if (result.length > 0) {
-            res.send('true')
+            con.query('SELECT expire FROM licenses WHERE license = ?', [license], function(err, result) {
+                if (date_full < result[0].expire) {
+                    res.send('true')
+                } else {
+                    res.send('false')
+                }
+            })
+            
         } else {
             res.send('false')
         }
