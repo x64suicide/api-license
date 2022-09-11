@@ -3,7 +3,7 @@ const app = express()
 const mysql = require('mysql')
 const path = require('path')
 
-// Connect with database mysql
+// MYSQL //
 var con = mysql.createConnection({
   host: "",
   user: "",
@@ -17,12 +17,14 @@ con.on('error', function(err) {
 
 app.use(express.urlencoded({ extended: true }))
 
-// VARIABLES
+// VARIABLES //
 
 let date = new Date();
 let date_full = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate()
 
 /// API ///
+
+// CHECK LICENSE
 
 app.post('/api/checklicense', function(req, res) {
     let license = req.body.license
@@ -45,6 +47,8 @@ app.post('/api/checklicense', function(req, res) {
     
 })
 
+// ADD LICENSE
+
 app.post('/api/addlicense', function(req, res) {
     let license = req.body.license
     let expire = req.body.expire
@@ -62,6 +66,8 @@ app.post('/api/addlicense', function(req, res) {
         }
     })
 })
+
+// REMOVE LICENSE
 
 app.post('/api/removelicense', function(req, res) {
     let license = req.body.license
