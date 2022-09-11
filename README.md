@@ -1,5 +1,5 @@
 # API LICENSE
-API For License's
+API For License
 
 # Modules
 express <br/>
